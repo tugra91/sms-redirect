@@ -37,8 +37,6 @@ public class MyWakefulReceiver extends WakefulBroadcastReceiver {
 
     private static final String TAG = "SMSBroadcastReceiver";
 
-    private FusedLocationProviderClient fusedLocationClient;
-
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -58,29 +56,13 @@ public class MyWakefulReceiver extends WakefulBroadcastReceiver {
                 msgs[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
                 strMessage += "\"" + msgs[i].getMessageBody() + "\"" + "\n";
 
-                fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
-
-
-                LocationRequest request = new LocationRequest();
-                request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-                request.setExpirationDuration(10000l);
-                request.setExpirationTime(10000l);
-
-
-                LocationResult locationResult = new LocationResult()
-
-                LocationCallback locationCallback = new LocationCallback();
-                locationCallback.onLocationResult();
-
-                fusedLocationClient.requestLocationUpdates(request, )
-
 
 
                 if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                         && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
-                fusedLocationClient.getLastLocation();
+                
                 Thread mailThread = new Thread(new SendMail(msgs[i].getDisplayOriginatingAddress(), strMessage, context));
                 mailThread.start();
 
